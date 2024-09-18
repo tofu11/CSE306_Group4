@@ -16,10 +16,8 @@ int F_counter(FILE *inFile) {
     } else {
         return -1; 
     }
-
     return counter;
 }
-
 int main(int argc, char *argv[]) {
     FILE * inFile = NULL;
     int fcount;
