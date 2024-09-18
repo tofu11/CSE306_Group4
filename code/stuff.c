@@ -66,23 +66,6 @@ void records(int argc, char *argv[], bool header) {
             index = atoi(argv[3]);
             printf("%d\n", index); // Print the converted integer
         } else {
-    	char line[1024];
-            if (fgets(line, sizeof(line), file) != NULL) {
-                char *token;
-                int currentIndex = 0;
-
-                // Tokenize the header line by commas and look for the field
-                token = strtok(line, ",");
-                while (token != NULL) {
-                    // Remove any surrounding whitespace or quotes
-                    token[strcspn(token, "\n")] = 0;
-                    if (strcmp(token, field) == 0) {
-                        index = currentIndex;
-                        break;
-                    }
-                    token = strtok(NULL, ",");
-                    currentIndex++;
-                }
             }
 
             fclose(file);
@@ -92,7 +75,6 @@ void records(int argc, char *argv[], bool header) {
                 printf("Field '%s' not found in header.\n", field);
             }    
     }
-}
 }
 int main(int argc, char *argv[]) {
     float meanVal = 0.0;
