@@ -2,13 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+
 float meanField(int argc, char *argv[], bool header) {
     FILE *file = fopen(argv[argc-1], "r"); // Open the CSV file passed as the last argument
     if (file == NULL) {
         perror("Error opening file");
         return 1;
     }
-    
+
     int num = 0;
     float totalSum = 0.0;
     char line[1024];
@@ -37,10 +38,10 @@ float meanField(int argc, char *argv[], bool header) {
             ptr++; // Move pointer to the first character after the comma
         }
         if(header){
-	header = false;
-	num-=1;
-	totalSum-=atof(ptr);
-	}
+        header = false;
+        num-=1;
+        totalSum-=atof(ptr);
+        }
         num += 1;
         totalSum += atof(ptr); // Use atof() to handle floating-point values
     }
@@ -56,19 +57,61 @@ float meanField(int argc, char *argv[], bool header) {
     float mean = totalSum / num;
     return mean;
 }
+void records(int argc, char *argv[], bool header) {
+    int index = -1;
 
+    if (header) {
+        // Check if argv[3] is a number and convert it using atoi if it is
+        if (argv[3][0] >= '0' && argv[3][0] <= '9') {
+            index = atoi(argv[3]);
+            printf("%d\n", index); // Print the converted integer
+        } else {
+    	char line[1024];
+            if (fgets(line, sizeof(line), file) != NULL) {
+                char *token;
+                int currentIndex = 0;
+
+                // Tokenize the header line by commas and look for the field
+                token = strtok(line, ",");
+                while (token != NULL) {
+                    // Remove any surrounding whitespace or quotes
+                    token[strcspn(token, "\n")] = 0;
+                    if (strcmp(token, field) == 0) {
+                        index = currentIndex;
+                        break;
+                    }
+                    token = strtok(NULL, ",");
+                    currentIndex++;
+                }
+            }
+
+            fclose(file);
+	if (index != -1) {
+                printf("Field '%s' found at index %d\n", field, index);
+            } else {
+                printf("Field '%s' not found in header.\n", field);
+            }    
+    }
+}
+}
 int main(int argc, char *argv[]) {
-	float meanVal = 0.0;
+    float meanVal = 0.0;
     if(strcmp(argv[1],"-h")==0){
         if(strcmp(argv[2],"-mean")==0){
-		printf("hhh");
             meanVal = meanField(argc, argv, true);
             printf("%0.2f\n",meanVal);
+        }
+        if(strcmp(argv[2],"-records")==0){
+            records(argc, argv, true);
         }
     }
     else if(strcmp(argv[1],"-mean")==0){
             meanVal = meanField(argc, argv, false);
             printf("%0.2f\n",meanVal);
         }
+    else if(strcmp(argv[2],"-records")==0){
+            records(argc, argv, false);
+        }
+    return 0;
 }
 
