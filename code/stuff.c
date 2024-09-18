@@ -21,16 +21,23 @@ int F_counter(FILE *inFile) {
 int main(int argc, char *argv[]) {
     FILE * inFile = NULL;
     int fcount;
-    inFile = fopen(argv[argc-1], "r");  // open file for reading
+
+// open file for reading
+    inFile = fopen(argv[argc-1], "r"); 
     if (inFile == NULL) {
       return -1;
 }
+
+//conditional for seeing which helper function to use
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-f") == 0) { 
             fcount = count_fields(inFile);
             printf("%d\n", fcount);
         }
     }
+
+
+//closing files 
     fclose(inFile);
     return 0;
 }
