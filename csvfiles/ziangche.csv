@@ -1,1 +1,4 @@
-DATE,ziangche,55,ACTIVITY & TOOL DESCRIPTION
+9-7-24,ziangche,55,Initial group meeting discussing plans of action and setting up github
+9-11-24,ziangche,40,initialized our code
+9-17-24,ziangche,15,worked on csv and -f functions 
+9-18-24,ziangche,65,changed -f into a helper and changed the main file to only run the -f helper function if -f is an argument of the user
