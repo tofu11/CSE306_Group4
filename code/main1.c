@@ -14,6 +14,9 @@ int main(int argc, char *argv[]) {
     int mean = 0;
     int records = 0;
     int f = 0;
+    int f_count = 0; 
+
+    
 
 
     // check option
@@ -45,6 +48,13 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    if (f == 1){
+        if(r == 1 && max == 1 && min == 1 && mean == 1 && records == 1){
+            return EXIT_FAILURE;
+        }
+    }
+
+
     // check file
     if (file == NULL) {
         return EXIT_FAILURE;
@@ -56,8 +66,18 @@ int main(int argc, char *argv[]) {
     } else {
         count = _r(file);
     }
+  // -f
+    if (f) {
+        count = F_counter(file);
+    }
 
+    if(f_count == -1){
+        return EXIT_FAILURE;
+    }else{
+        printf("%d\n", f_count);
+    }
     //print numbers
+
     if(count == -1){
         return EXIT_FAILURE;
     }else{
