@@ -1,44 +1,81 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <limits.h> // For INT_MIN and INT_MAX
+#include <float.h>
+#include <stdbool.h>
 
-int main(int argc, char *argv[]){}
+float minField(int argc, char *argv[], int field) {
+  
+    bool header = false;
+    if (argc > 2 && strcmp(argv[2], "-h") == 0) {
+        header = true; 
+    }
 
-void minMax(FILE*inFile, int field, char mode){
-    int comapre;
-    int maxNum = INT_MAX;
-    int minNum = INT_MIN;
+    FILE *inFile = fopen(argv[argc - 1], "r"); 
+    if (inFile == NULL) {
+        perror("Error opening file");
+        return FLT_MAX; 
+    }
 
-    while(fscanf(inFIle, "%d", &compare) == 1){
-        if(mode == 'm'){
-            (if compare>maxNum){
-                maxNum = compare;
+    int num = 0;
+    float minValue = FLT_MAX; 
+    char row[1024]; 
+
+   
+    if (header) {
+        fgets(row, sizeof(row), inFile); 
+    }
+
+    while (fgets(row, sizeof(row), inFile)) {
+        
+        size_t len = strlen(row);
+
+       
+        if (len > 0 && row[len - 1] == '\n') {
+            row[len - 1] = '\0'; 
+        }
+
+       
+        char *ptr = row;
+        int currentField = 0;
+
+       
+        while (1) {
+            char *comma = strchr(ptr, ',');
+            if (comma == NULL) {
+                comma = row + strlen(row); 
             }
-        }else if(if mdoe == 'n'){
-            if(compare<minNum){
-                minNum = compare;
+
+            
+            if (currentField == field) {
+                char temp[64];
+                strncpy(temp, ptr, comma - ptr);
+                temp[comma - ptr] = '\0'; 
+
+                char *endptr;
+                float value = strtof(temp, &endptr);
+                if (*endptr == '\0') { 
+                    if (value < minValue) {
+                        minValue = value; 
+                    }
+                    num++;
+                }
+                break; 
             }
+
+            ptr = comma + 1; 
+            currentField++;
+            if (*comma == '\0') break; 
         }
     }
 
-    if(mode == "m"){
-        printf("Maximum: %d\n" maxNum);
-    }else if (mode == 'n'){
-        printf("Minimum: %d\n minNum");
+    fclose(inFile);
+
+    if (num == 0) {
+        return -1;
     }
+
+    return minValue; 
 }
 
-    
-
-    //file open for 
-
-    //access arguments here
-
-    // initalize variables here
-
-
-    // find min and max here 
-
-}
 
