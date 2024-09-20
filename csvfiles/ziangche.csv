@@ -1,1 +1,7 @@
-DATE,ziangche,30,ACTIVITY & TOOL DESCRIPTION
+DATE,UBIT,DURATION,ACTIVITY & TOOL DESCRIPTION
+9-7-24,ziangche,55,Initial group meeting discussing plans of action and setting up github
+9-11-24,ziangche,40,initialized our code
+9-17-24,ziangche,15,worked on csv and -f functions 
+9-18-24,ziangche,65,changed -f into a helper and changed the main file to only run the -f helper function if -f is an argument of the user
+9-19-24,ziangche, 180, worked on records and created helper function for trimming and counting the number of headers
+9-20-24,ziangche,120, debugged and merged everyones code 
