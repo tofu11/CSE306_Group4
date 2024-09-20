@@ -16,7 +16,6 @@ int main(int argc, char *argv[]) {
     int f = 0;
     int f_count = 0; 
 
-    
 
 
     // check option
@@ -67,9 +66,15 @@ int main(int argc, char *argv[]) {
         count = _r(file);
     }
   // -f
-    if (f) {
-        count = F_counter(file);
+    FILE *inFile = fopen(file, "r");
+    if (inFile == NULL) {
+        perror("Error opening file");
+        return -1;
     }
+    f_count = F_counter(inFile);  // Correct: passing FILE* as argument
+    fclose(inFile);
+
+
 
     if(f_count == -1){
         return EXIT_FAILURE;

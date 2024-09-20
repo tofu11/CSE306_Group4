@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "helperfunc.h"
-
-
 int _h(const char *file) {
     FILE *f = fopen(file, "r");
     if (f == NULL) {
