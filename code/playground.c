@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-
+#include <ctype.h>
 float meanField(int argc, char *argv[], bool header) {
     FILE *file = fopen(argv[argc-1], "r"); // Open the CSV file passed as the last argument
     if (file == NULL) {
@@ -75,6 +75,26 @@ int F_counter(FILE *inFile) {
     return counter;
 }
 
+char *trim_whitespace(char *str) {
+    char *end;
+
+    // Trim leading space
+    while (isspace((unsigned char)*str)) str++;
+
+    if (*str == 0)  // All spaces?
+        return str;
+
+    // Trim trailing space
+    end = str + strlen(str) - 1;
+    while (end > str && isspace((unsigned char)*end)) end--;
+
+    // Write new null terminator
+    *(end + 1) = 0;
+
+    return str;
+}
+
+
 void records(int argc, char *argv[], bool header) {
     int target_column = -1;
 
@@ -115,6 +135,7 @@ void records(int argc, char *argv[], bool header) {
 
         // Find the index of the target column using the field names
         while (field != NULL) {
+            field = trim_whitespace(field);  
             if (strcmp(field, argv[3]) == 0) {
                 target_column = current_column;
                 break;
@@ -130,6 +151,7 @@ void records(int argc, char *argv[], bool header) {
             return;
         }
     }
+    printf("The index is%d\n", target_column);
 
     // Now read the rest of the file (the actual data)
     while (fgets(line, sizeof(line), inFile)) {
@@ -143,7 +165,6 @@ void records(int argc, char *argv[], bool header) {
         char *field = strtok(line, ",");
         int current_column = 0;
         bool match = false;
-        printf("The index is%d\n", target_column);
 	// Traverse fields in the line
         while (field != NULL) {
             if (current_column == target_column) {
