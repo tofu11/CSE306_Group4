@@ -72,7 +72,7 @@ float minField(int argc, char *argv[], int field) {
     fclose(inFile);
 
     if (num == 0) {
-        return -1;
+        return 1;
     }
 
     return minValue; 
@@ -143,8 +143,10 @@ float maxField(int argc, char *argv[], int field) {
     fclose(inFile);
 
     if (num == 0) {
-        return -1; 
+        return 1; 
     }
 
     return maxValue; 
 }
+
+
