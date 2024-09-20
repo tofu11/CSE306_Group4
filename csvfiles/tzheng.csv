@@ -1,7 +1,9 @@
 DATE, UBIT, DURATION, ACTIVITY & TOOL DESCRIPTION
 09/11/2024, tzheng8, 60 mins, worked together on github repo by using different commands and creating brances. Read over documentation as well
 9/13/2024, tzheng8, 60 mins, worked on simple min and max using VSCode. To test this, I ran my own tests and compiled using GCC and ./a.out
-9/13/2024, tzheng8, 20 mins, Some pesudocoding to figure out the logic on how to handle the command line and the different cases 
-9/16/2024, tzheng8, Worked on -min -max function (attempted to create a makeFile, but continued with GCC)
-9/18/2024,tzheng8, Worked on -min -max function
-9/19/2024, tzheng8, worked on -min -max function
+9/13/2024, tzheng8, 28 mins, Some pesudocoding to figure out the logic on how to handle the command line and the different cases 
+9/16/2024, tzheng8, 73 mins Worked on -min -max function (attempted to create a makeFile, but continued with GCC)
+9/18/2024,tzheng8, 60 mins Worked on -min -max function
+9/19/2024, tzheng8, 104 mins, worked on -min -max function
+
+

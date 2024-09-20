@@ -94,7 +94,7 @@ float maxField(int argc, char *argv[], int field) {
     }
 
     int num = 0;
-    float maxValue = FLT_MIN; // Changed to FLT_MIN for max calculation
+    float maxValue = 0;
     char row[1024]; 
 
     if (header) {
@@ -150,3 +150,38 @@ float maxField(int argc, char *argv[], int field) {
 }
 
 
+int main(int argc, char *argv[]) {
+    if (argc < 3) {
+        return EXIT_FAILURE;
+    }
+
+    int fieldIndex = atoi(argv[1]);
+    if (fieldIndex < 0) {
+        return EXIT_FAILURE;
+    }
+
+    bool hasHeader = (argc > 3 && strcmp(argv[2], "-h") == 0);
+   char *filename;
+   if (hasHeader) {
+    filename = argv[3];
+    } else {
+    filename = argv[2];
+    }
+
+    float minValue = minField(argc, argv, fieldIndex);
+    float maxValue = maxField(argc, argv, fieldIndex);
+
+    if (minValue == FLT_MAX) {
+        fprintf(stderr, "Could not find minimum value or file is empty.\n");
+    } else {
+        printf("Minimum value in field %d: %.2f\n", fieldIndex, minValue);
+    }
+
+    if (maxValue == FLT_MIN) {
+        fprintf(stderr, "Could not find maximum value or file is empty.\n");
+    } else {
+        printf("Maximum value in field %d: %.2f\n", fieldIndex, maxValue);
+    }
+
+    return EXIT_SUCCESS;
+}
