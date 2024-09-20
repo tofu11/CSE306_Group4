@@ -134,6 +134,7 @@ void accumulate_field(char *accumulated, const char *field) {
     strcat(accumulated, field);
 }
 
+
 void records(int argc, char *argv[], bool header) {
     int target_column = -1;
 
@@ -194,12 +195,11 @@ void records(int argc, char *argv[], bool header) {
         // Find the index of the target column
         int currIndex = 0;
         while (field != NULL) {
-            field = trim_whitespace(field);
+            field = trim_whitespace(field);  // Ensure no trailing or leading whitespace
             if (strcmp(field, argv[value]) == 0) {  // Catch the case if the column is given by string
                 target_column = current_column;
                 break;
-            }
-            else if (currIndex == field_count) {  // Catch the case if the column is given by number
+            } else if (currIndex == field_count) {  // Catch the case if the column is given by number
                 target_column = current_column;
                 break;
             }
@@ -259,22 +259,61 @@ void records(int argc, char *argv[], bool header) {
             }
             current_column++;
         }
-/*
-        printf("Accumulated value: %s\n", accumulated_field);
-        printf("Comparing to: %s\n", argv[secondNum]);
-        printf("Equal? ");
-        if(strcmp(accumulated_field, argv[secondNum]) == 0){
-            printf("yes\n");
-        }else{
-            printf("no\n");
-        }
-*/
-        // Compare the full accumulated value
-        if (strcmp(accumulated_field, argv[secondNum]) == 0) {
+
+        // Trim whitespaces on accumulated fields for clean comparison
+        char *trimmed_accumulated = trim_whitespace(accumulated_field);
+
+        // Compare the full accumulated value (string comparison)
+        if (strcmp(trimmed_accumulated, argv[secondNum]) == 0) {
             match = true;
         }
-        else if(atof(accumulated_field) - atof(argv[secondNum]) == 0){
-            match=true;
+        int trimmed_accumulated_is_num = true;
+        int dot=0;
+        int dash=0;
+        // check if these are numbers
+        for (int i = 0; i < trimmed_accumulated[i]!='\0'; i++){
+            if(trimmed_accumulated[i]=='.'){
+                dot++;
+            }
+            else if(trimmed_accumulated[i]=='-'){
+                dot++;
+            }
+            else if(trimmed_accumulated[i] < '0' || trimmed_accumulated[i] > '9'){
+
+            }else{
+                trimmed_accumulated_is_num=false;
+            }
+            
+        }
+        if(dot>1 || dash>1){
+            trimmed_accumulated_is_num=false;
+        }
+
+        dot=0;
+        dash=0;
+
+        int argv_secondNum_is_num = true;
+
+        for (int i = 0; i < argv[secondNum][i]!='\0'; i++){
+            if(argv[secondNum][i]=='.'){
+                dot++;
+            }
+            else if(argv[secondNum][i]=='-'){
+                dot++;
+            }
+            else if(argv[secondNum][i] < '0' || argv[secondNum][i] > '9'){
+
+            }else{
+                argv_secondNum_is_num=false;
+            }
+            
+        }
+        if(dot>1 || dash>1){
+            argv_secondNum_is_num=false;
+        }
+        
+        if (atof(trimmed_accumulated) - atof(argv[secondNum]) == 0 && trimmed_accumulated_is_num && argv_secondNum_is_num) {
+            match = true;
         }
 
         // If a match was found, print the entire original line
@@ -286,6 +325,7 @@ void records(int argc, char *argv[], bool header) {
 
     fclose(inFile);
 }
+
 
 int main(int argc, char *argv[]) {
     float meanVal = 0.0;
