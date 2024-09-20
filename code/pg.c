@@ -147,11 +147,16 @@ void records(int argc, char *argv[], bool header) {
         strcpy(original_line, line);
         char *field = strtok(line, ",");
         int current_column = 0;
-
+        int value;
+        if(header){ //since there are differences
+            value = 3;
+        }else{
+            value = 2;
+        }
         // Find the index of the target column
         while (field != NULL) {
             field = trim_whitespace(field);
-            if (strcmp(field, argv[3]) == 0) {
+            if (strcmp(field, argv[value]) == 0) {
                 target_column = current_column;
                 break;
             }
@@ -160,7 +165,7 @@ void records(int argc, char *argv[], bool header) {
         }
 
         if (target_column == -1) {
-            printf("Column '%s' not found.\n", argv[3]);
+            printf("Column '%s' not found.\n", argv[value]);
             fclose(inFile);
             return;
         }
@@ -178,6 +183,13 @@ void records(int argc, char *argv[], bool header) {
         int current_column = 0;
         bool match = false;
 
+        int secondNum; // brain farting but this is the value that we're comparing that comes after the column in the command
+
+        if(header){
+            secondNum = 4;
+        }else{
+            secondNum = 3;
+        }
         // Traverse fields in the line
         while (field != NULL) {
             // Handle the last field differently if it's the target column
@@ -186,7 +198,7 @@ void records(int argc, char *argv[], bool header) {
                     field = clean_last_value(field);  // Clean up the last field
                 }
                 // Compare the target column's value to argv[4]
-                if (strcmp(field, argv[4]) == 0) {
+                if (strcmp(field, argv[secondNum]) == 0) {
                     match = true;
                 }
                 break;
