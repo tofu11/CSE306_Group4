@@ -23,8 +23,7 @@ float minField(int argc, char *argv[], int field) {
 
    
     if (header) {
-        fgets(row, sizeof(row), inFile); 
-    }
+        fgets(row, sizeof(row), inFile);  }
 
     while (fgets(row, sizeof(row), inFile)) {
         
@@ -161,7 +160,7 @@ int main(int argc, char *argv[]) {
     }
 
     bool hasHeader = (argc > 3 && strcmp(argv[2], "-h") == 0);
-   char *filename;
+    char *filename;
    if (hasHeader) {
     filename = argv[3];
     } else {
