@@ -59,28 +59,23 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
+
+    FILE *inFile = fopen(file, "r");
+
     // -r or -h
     if (h) {
         count = _h(file);
-    } else {
+    } 
+    
+    if (f) {       
+        count = F_counter(inFile);
+        fclose(inFile);
+    }
+    
+    if(r){
         count = _r(file);
     }
-  // -f
-    FILE *inFile = fopen(file, "r");
-    if (inFile == NULL) {
-        perror("Error opening file");
-        return -1;
-    }
-    f_count = F_counter(inFile);  // Correct: passing FILE* as argument
-    fclose(inFile);
 
-
-
-    if(f_count == -1){
-        return EXIT_FAILURE;
-    }else{
-        printf("%d\n", f_count);
-    }
     //print numbers
 
     if(count == -1){
