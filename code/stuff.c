@@ -83,26 +83,68 @@ void records(int argc, char *argv[], bool header) {
             index = atoi(argv[3]);
             printf("%d\n", index); // Print the converted integer
         } else {
-		FILE * inFile = NULL;
-    		int fcount;
-		// open file for reading
-    		inFile = fopen(argv[argc-1], "r");
-    		if (inFile == NULL) {
-			return -1;
-		}
-		//conditional for seeing which helper function to use
+                FILE * inFile = NULL;
+                int fcount;
+                // open file for reading
+                inFile = fopen(argv[argc-1], "r");
+                if (inFile == NULL) {
+                        return -1;
+                }
+                //conditional for seeing which helper function to use
             fcount = F_counter(inFile)-1;
             printf("%d\n", fcount);
-    		
 
-	    fclose(inFile);
+            char line[1024];
+            char **list = NULL;  // Pointer to dynamically allocated array of strings
+            int line_count = 0;
 
-	}
+            while (fgets(line, sizeof(line), inFile)) {
+            // Dynamically grow the array to accommodate a new line
+            list = realloc(list, (line_count + 1) * sizeof(char *));
+            if (list == NULL) {
+                perror("Memory allocation failed");
+                return EXIT_FAILURE;
+            }
+
+            // Allocate memory for the line and copy the line's content
+            list[line_count] = malloc(strlen(line) + 1);
+            strcpy(list[line_count], line);
+            line_count++;
+        }
+            for (int i = 0; i < line_count; i++) {
+        // Parse the line into fields by splitting with ','
+            char *field = strtok(list[i], ",");
+            int field_count = 1;
+            bool match = false;
+            while (field != NULL) {
+                if(field_count==3){
+                    if(strcmp(field,argv[4])==0){
+                        match=true;
+                        //printf("%s",list[line_count]);
+                        //printf("  Field %d: %s\n", field_count, field);
+                    }
+                    
+                }
+                if(match){
+                    printf("%s\n", list[i]);
+                    match=false;
+                }
+                
+                field = strtok(NULL, ",");
+                field_count++;
+                
+            }
+    }
+
+            fclose(inFile);
+
+        }
             }
     return 0;
 
 
-}    
+}
+
 int main(int argc, char *argv[]) {
     float meanVal = 0.0;
     if(strcmp(argv[1],"-h")==0){
