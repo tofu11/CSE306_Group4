@@ -7,7 +7,7 @@
 float meanField(int argc, char *argv[], bool header) {
     FILE *file = fopen(argv[argc-1], "r"); // Open the CSV file passed as the last argument
     if (file == NULL) {
-        perror("Error opening file");
+        printf("Error opening file");
         return 1;
     }
 
@@ -52,6 +52,10 @@ float meanField(int argc, char *argv[], bool header) {
     if (num == 0) {
         printf("No numeric data found.\n");
         return 1;
+    }
+
+    if(!header){
+        num--;
     }
 
     float mean = totalSum / num;
@@ -149,7 +153,7 @@ void records(int argc, char *argv[], bool header) {
     // open file for reading
     inFile = fopen(argv[argc-1], "r");
     if (inFile == NULL) {
-        perror("File opening failed");
+        printf("File opening failed");
         return;
     }
 
