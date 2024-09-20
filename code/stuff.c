@@ -37,11 +37,14 @@ float meanField(int argc, char *argv[], bool header) {
         if (*ptr == ',') {
             ptr++; // Move pointer to the first character after the comma
         }
+        /*
         if (header) {
             header = false;
             num -= 1;
             totalSum -= atof(ptr);
         }
+        */
+        
         num += 1;
         totalSum += atof(ptr); // Use atof() to handle floating-point values
     }
@@ -54,9 +57,10 @@ float meanField(int argc, char *argv[], bool header) {
         return 1;
     }
 
-    if(!header){
-        num--;
-    }
+num-=1;
+    printf("totalSum: %f\n", totalSum);
+    printf("num: %d\n", num);
+
 
     float mean = totalSum / num;
     return mean;
