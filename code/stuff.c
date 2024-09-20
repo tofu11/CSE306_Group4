@@ -94,7 +94,7 @@ float maxField(int argc, char *argv[], int field) {
     }
 
     int num = 0;
-    float maxValue = 0;
+    float maxValue = FLT_MIN;
     char row[1024]; 
 
     if (header) {
