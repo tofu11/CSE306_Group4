@@ -10,7 +10,6 @@ float meanField(int argc, char *argv[], bool header) {
         printf("Error opening file");
         return 1;
     }
-
     int num = 0;
     float totalSum = 0.0;
     char line[1024];
@@ -44,7 +43,6 @@ float meanField(int argc, char *argv[], bool header) {
             totalSum -= atof(ptr);
         }
         */
-        
         num += 1;
         totalSum += atof(ptr); // Use atof() to handle floating-point values
     }
@@ -295,7 +293,6 @@ void records(int argc, char *argv[], bool header) {
 }
 
 int main(int argc, char *argv[]) {
-    int h = 0; 
     int count = 0; 
     char *file = NULL;
     int r = 0;
@@ -325,9 +322,7 @@ int main(int argc, char *argv[]) {
         
     // check option
     for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "-h") == 0) {
-            h = 1;
-        } else if (strcmp(argv[i], "-r") == 0) {
+          if (strcmp(argv[i], "-r") == 0) {
             r = 1;  
         } else if (strcmp(argv[i], "-max") == 0) {
             max = 1;
@@ -343,12 +338,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // check if -h is used alone
-    if (h == 1){
-        if(r == 0 && max == 0 && min == 0 && meanVal == 0.0 && recordCount == 0){
-            return EXIT_FAILURE;
-        }
-    }
 
     if (f == 1){
         if(r == 1 && max == 1 && min == 1 && meanVal == 1 && recordCount == 1){
@@ -364,13 +353,6 @@ int main(int argc, char *argv[]) {
     FILE *inFile = fopen(file, "r");
 
     // -r or -h
-
-    if (h) {
-        count = _h(file);
-        printf("%d\n", count);
-    } 
-    
-
 
 
     if (f) {       
