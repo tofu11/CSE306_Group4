@@ -74,7 +74,6 @@ int F_counter(FILE *inFile) {
     }
     return counter;
 }
-
 char *trim_whitespace(char *str) {
     char *end;
 
@@ -94,11 +93,19 @@ char *trim_whitespace(char *str) {
     return str;
 }
 
+// Function to clean the last field value
+char *clean_last_value(char *str) {
+    size_t len = strlen(str);
+    if (str[len - 1] == '\n') {
+        str[len - 1] = '\0';  // Remove the newline character at the end
+    }
+    return trim_whitespace(str);
+}
 
 void records(int argc, char *argv[], bool header) {
     int target_column = -1;
 
-	FILE * inFile = NULL;
+	FILE *inFile = NULL;
     int field_count;
 
     // Open file for reading
@@ -156,20 +163,20 @@ void records(int argc, char *argv[], bool header) {
             line[len - 1] = '\0';
         }
 
-        strcpy(original_line, line);
+        strcpy(original_line, line);  // Preserve the original line
         char *field = strtok(line, ",");
         int current_column = 0;
         bool match = false;
 
         // Traverse fields in the line
         while (field != NULL) {
-            if (current_column == target_column) {
-                // Convert numeric field to string for comparison
-                char field_str[1024];
-                snprintf(field_str, sizeof(field_str), "%s", field);
-
+            // Handle the last field differently if it's the target column
+            if (current_column == target_column+2) {
+                if (strtok(NULL, ",") == NULL) {  // If it's the last field in the row
+                    field = clean_last_value(field);  // Clean up the last field
+                }
                 // Compare the target column's value to argv[4]
-                if (strcmp(field_str, argv[4]) == 0) {
+                if (strcmp(field, argv[4]) == 0) {
                     match = true;
                 }
                 break;
@@ -202,7 +209,7 @@ int main(int argc, char *argv[]) {
             meanVal = meanField(argc, argv, false);
             printf("%0.2f\n",meanVal);
         }
-    else if(strcmp(argv[2],"-records")==0){
+    else if(strcmp(argv[1],"-records")==0){
             records(argc, argv, false);
         }
     return 0;
