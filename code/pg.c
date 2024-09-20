@@ -125,7 +125,18 @@ void records(int argc, char *argv[], bool header) {
         }
     }
 
-    field_count = F_counter(inFile) - 1;
+    int value;
+        if(header){ //since there are differences
+            value = 3;
+        }else{
+            value = 2;
+        }
+
+    if (argv[value][0] >= '0' && argv[value][0] <= '9') {
+        field_count = atoi(argv[value]);  // Convert to integer if it’s a number
+    } else {
+        field_count = F_counter(inFile) - 1;  // If not a number, use F_counter
+    }
     rewind(inFile);
 
     if (field_count == -1) {
@@ -147,21 +158,22 @@ void records(int argc, char *argv[], bool header) {
         strcpy(original_line, line);
         char *field = strtok(line, ",");
         int current_column = 0;
-        int value;
-        if(header){ //since there are differences
-            value = 3;
-        }else{
-            value = 2;
-        }
+        
         // Find the index of the target column
+        int currIndex = 0;
         while (field != NULL) {
             field = trim_whitespace(field);
-            if (strcmp(field, argv[value]) == 0) {
+            if (strcmp(field, argv[value]) == 0) { // catch the case if the column is given by string
+                target_column = current_column;
+                break;
+            }
+            else if(currIndex == field_count){ // catch the case if the column is given by number
                 target_column = current_column;
                 break;
             }
             field = strtok(NULL, ",");
             current_column++;
+            currIndex++;
         }
 
         if (target_column == -1) {
