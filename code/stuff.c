@@ -5,21 +5,21 @@
 #include <stdbool.h>
 
 float minField(int argc, char *argv[], int field) {
-    bool header = false;
-    if (argc > 2 && strcmp(argv[2], "-h") == 0) {
-        header = true; 
-    }
     FILE *inFile = fopen(argv[argc - 1], "r"); 
     if (inFile == NULL) {
         perror("Error opening file");
         return FLT_MAX; 
     }
+
     int num = 0;
     float minValue = FLT_MAX; 
     char row[1024]; 
-    if (header) {
-        fgets(row, sizeof(row), inFile);  }
-    
+
+    // Skip header if needed
+    if (argc > 2 && strcmp(argv[2], "-h") == 0) {
+        fgets(row, sizeof(row), inFile);
+    }
+
     while (fgets(row, sizeof(row), inFile)) {
         size_t len = strlen(row);
         if (len > 0 && row[len - 1] == '\n') {
@@ -27,6 +27,7 @@ float minField(int argc, char *argv[], int field) {
         }
         char *ptr = row;
         int currentField = 0;
+
         while (1) {
             char *comma = strchr(ptr, ',');
             if (comma == NULL) {
@@ -55,30 +56,27 @@ float minField(int argc, char *argv[], int field) {
     }
 
     fclose(inFile);
-    if (num == 0) {
+    if (num == 0){
         return 1;
     }
     return minValue; 
 }
 
-
-
 float maxField(int argc, char *argv[], int field) {
-    bool header = false;
-    if (argc > 2 && strcmp(argv[2], "-h") == 0) {
-        header = true; 
-    }
     FILE *inFile = fopen(argv[argc - 1], "r"); 
     if (inFile == NULL) {
         perror("Error opening file");
         return FLT_MIN; 
     }
+
     int num = 0;
     float maxValue = FLT_MIN;
     char row[1024]; 
-    if (header) {
-        fgets(row, sizeof(row), inFile); 
+
+    if (argc > 2 && strcmp(argv[2], "-h") == 0) {
+        fgets(row, sizeof(row), inFile);
     }
+
     while (fgets(row, sizeof(row), inFile)) {
         size_t len = strlen(row);
         if (len > 0 && row[len - 1] == '\n') {
@@ -86,6 +84,7 @@ float maxField(int argc, char *argv[], int field) {
         }
         char *ptr = row;
         int currentField = 0;
+
         while (1) {
             char *comma = strchr(ptr, ',');
             if (comma == NULL) {
@@ -113,43 +112,60 @@ float maxField(int argc, char *argv[], int field) {
     }
 
     fclose(inFile);
-
-    if (num == 0) {
-        return 1; 
+    if (num == 0){
+        return 1
     }
-    return maxValue; 
+    retur maxValue
 }
 
-
 int main(int argc, char *argv[]) {
-    if (argc < 3) {
+    if (argc < 4) {
         return EXIT_FAILURE;
     }
-    int fieldIndex = atoi(argv[1]);
+
+    bool header = false;
+    int fieldIndex;
+
+    if (strcmp(argv[1], "-h") == 0) {
+        header = true;
+        if (strcmp(argv[2], "-min") == 0) {
+            fieldIndex = atoi(argv[3]);
+        } else if (strcmp(argv[2], "-max") == 0) {
+            fieldIndex = atoi(argv[3]);
+        } else {
+            fprintf(stderr, "Error.\n");
+            return EXIT_FAILURE;
+        }
+    } else {
+        if (strcmp(argv[1], "-min") == 0) {
+            fieldIndex = atoi(argv[2]);
+        } else if (strcmp(argv[1], "-max") == 0) {
+            fieldIndex = atoi(argv[2]);
+        } else {
+            fprintf(stderr, "Error.\n");
+            return EXIT_FAILURE;
+        }
+    }
+
     if (fieldIndex < 0) {
+        fprintf(stderr, "No Negative.\n");
         return EXIT_FAILURE;
     }
-    bool hasHeader = (argc > 3 && strcmp(argv[2], "-h") == 0);
-    char *filename;
-    if (hasHeader) {
-    filename = argv[3];
-    } else {
-    filename = argv[2];
-    }
 
-    float minValue = minField(argc, argv, fieldIndex);
-    float maxValue = maxField(argc, argv, fieldIndex);
-
-    if (minValue == 1) {
-        fprintf(stderr, "Could not find minimum value or file is empty.\n");
+    if (strcmp(argv[1 + header], "-min") == 0) {
+        float minValue = minField(argc, argv, fieldIndex);
+        if (minValue == 1) {
+            fprintf(stderr, "Error.\n");
+        } else {
+            printf("Minimum value in field %d: %.2f\n", fieldIndex, minValue);
+        }
     } else {
-        printf("Minimum value in field %d: %.2f\n", fieldIndex, minValue);
-    }
-
-    if (maxValue == 1) {
-        fprintf(stderr, "Could not find maximum value or file is empty.\n");
-    } else {
-        printf("Maximum value in field %d: %.2f\n", fieldIndex, maxValue);
+        float maxValue = maxField(argc, argv, fieldIndex);
+        if (maxValue == 1) {
+            fprintf(stderr, "Error.\n");
+        } else {
+            printf("Maximum value in field %d: %.2f\n", fieldIndex, maxValue);
+        }
     }
 
     return EXIT_SUCCESS;
