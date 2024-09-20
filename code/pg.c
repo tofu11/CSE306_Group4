@@ -115,6 +115,16 @@ void records(int argc, char *argv[], bool header) {
         return;
     }
 
+    // Skip the first line (header) if 'header' is true
+    if (header) {
+        char header_line[1024];  // Buffer to store the header line
+        if (fgets(header_line, sizeof(header_line), inFile) == NULL) {  // Read the header line and discard it
+            printf("Error reading the header.\n");
+            fclose(inFile);
+            return;
+        }
+    }
+
     field_count = F_counter(inFile) - 1;
     rewind(inFile);
 
@@ -171,7 +181,7 @@ void records(int argc, char *argv[], bool header) {
         // Traverse fields in the line
         while (field != NULL) {
             // Handle the last field differently if it's the target column
-            if (current_column == target_column+2) {
+            if (current_column == target_column + 2) {  // Check for the correct column
                 if (strtok(NULL, ",") == NULL) {  // If it's the last field in the row
                     field = clean_last_value(field);  // Clean up the last field
                 }
@@ -193,6 +203,7 @@ void records(int argc, char *argv[], bool header) {
 
     fclose(inFile);
 }
+
 
 int main(int argc, char *argv[]) {
     float meanVal = 0.0;
