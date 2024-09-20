@@ -262,16 +262,21 @@ void records(int argc, char *argv[], bool header) {
 
         // Trim whitespaces on accumulated fields for clean comparison
         char *trimmed_accumulated = trim_whitespace(accumulated_field);
-
+        
         // Compare the full accumulated value (string comparison)
-        if (strcmp(trimmed_accumulated, argv[secondNum]) == 0) {
-            match = true;
-        }
         int trimmed_accumulated_is_num = true;
         int dot=0;
         int dash=0;
         // check if these are numbers
-        for (int i = 0; i < trimmed_accumulated[i]!='\0'; i++){
+
+        if (strcmp(trimmed_accumulated, argv[secondNum]) == 0) {
+            match = true;
+        }
+        else{
+        for (int i = 0; trimmed_accumulated[i] != '\0'; i++) {
+            if(trimmed_accumulated[i]>='A' && trimmed_accumulated[i]<='Z'|| trimmed_accumulated[i]>='a' && trimmed_accumulated[i]<='z'){
+                trimmed_accumulated_is_num = false;
+            }
             if(trimmed_accumulated[i]=='.'){
                 dot++;
             }
@@ -294,7 +299,10 @@ void records(int argc, char *argv[], bool header) {
 
         int argv_secondNum_is_num = true;
 
-        for (int i = 0; i < argv[secondNum][i]!='\0'; i++){
+        for (int i = 0; argv[secondNum][i] != '\0'; i++) {
+            if(argv[secondNum][i]>='A' && argv[secondNum][i]<='Z'|| argv[secondNum][i]>='a' && argv[secondNum][i]<='z'){
+                trimmed_accumulated_is_num = false;
+            }
             if(argv[secondNum][i]=='.'){
                 dot++;
             }
@@ -314,6 +322,7 @@ void records(int argc, char *argv[], bool header) {
         
         if (atof(trimmed_accumulated) - atof(argv[secondNum]) == 0 && trimmed_accumulated_is_num && argv_secondNum_is_num) {
             match = true;
+        }
         }
 
         // If a match was found, print the entire original line
