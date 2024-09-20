@@ -306,7 +306,6 @@ int main(int argc, char *argv[]) {
     int f_count = 0; 
     float meanVal = 0.0;
 
-
     if(strcmp(argv[1],"-h")==0){
         if(strcmp(argv[2],"-mean")==0){
             meanVal = meanField(argc, argv, true);
@@ -365,25 +364,31 @@ int main(int argc, char *argv[]) {
     FILE *inFile = fopen(file, "r");
 
     // -r or -h
+
     if (h) {
         count = _h(file);
+        printf("%d\n", count);
     } 
     
+
+
+
     if (f) {       
         count = F_counter(inFile);
+        printf("%d\n", count);
         fclose(inFile);
     }
     
     if(r){
         count = _r(file);
+        printf("%d\n", count);
     }
 
     //print numbers
 
     if(count == -1){
         return EXIT_FAILURE;
-    }else{
-        printf("%d\n", count);
-    }
+
     return EXIT_SUCCESS;
+}
 }
