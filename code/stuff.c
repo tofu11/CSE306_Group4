@@ -57,6 +57,23 @@ float meanField(int argc, char *argv[], bool header) {
     float mean = totalSum / num;
     return mean;
 }
+
+int F_counter(FILE *inFile) {
+    char buffer[1000];
+    char *data;
+    int counter = 0;
+
+    if (fgets(buffer, sizeof(buffer), inFile) != NULL) {
+        data = strtok(buffer, ",");
+        while (data != NULL) {
+            counter++;
+            data = strtok(NULL, ",");
+        }
+    } else {
+        return -1; 
+    }
+    return counter;
+}
 void records(int argc, char *argv[], bool header) {
     int index = -1;
 
@@ -66,16 +83,26 @@ void records(int argc, char *argv[], bool header) {
             index = atoi(argv[3]);
             printf("%d\n", index); // Print the converted integer
         } else {
-            }
+		FILE * inFile = NULL;
+    		int fcount;
+		// open file for reading
+    		inFile = fopen(argv[argc-1], "r");
+    		if (inFile == NULL) {
+			return -1;
+		}
+		//conditional for seeing which helper function to use
+            fcount = F_counter(inFile)-1;
+            printf("%d\n", fcount);
+    		
 
-            fclose(file);
-	if (index != -1) {
-                printf("Field '%s' found at index %d\n", field, index);
-            } else {
-                printf("Field '%s' not found in header.\n", field);
-            }    
-    }
-}
+	    fclose(inFile);
+
+	}
+            }
+    return 0;
+
+
+}    
 int main(int argc, char *argv[]) {
     float meanVal = 0.0;
     if(strcmp(argv[1],"-h")==0){
