@@ -87,7 +87,7 @@ void records(int argc, char *argv[], bool header) {
 		}
 		//conditional for seeing which helper function to use
             field_count = F_counter(inFile)-1;
-            printf("%d\n", field_count);
+            //printf("The index is %d\n", field_count);
 
     char line[1024];
     char original_line[1024];  // Store the original line for printing
@@ -143,8 +143,8 @@ void records(int argc, char *argv[], bool header) {
         char *field = strtok(line, ",");
         int current_column = 0;
         bool match = false;
-
-        // Traverse fields in the line
+        printf("The index is%d\n", target_column);
+	// Traverse fields in the line
         while (field != NULL) {
             if (current_column == target_column) {
                 // Compare the target column's value to argv[4] (e.g., "12")
